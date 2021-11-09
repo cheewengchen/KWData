@@ -15,18 +15,29 @@ namespace KWData.Controllers
     {
         private readonly ICustomerRepository _repo;
         private readonly IMapper _mapper;
+        private readonly ApplicationDbContext _db;
 
-        public CustomersController(ICustomerRepository repo, IMapper mapper)
+        public CustomersController(ICustomerRepository repo, IMapper mapper, ApplicationDbContext db)
         {
             _repo = repo;
             _mapper = mapper;
+            _db = db;
         }
         
         // GET: CustomersController
-        public ActionResult Index()
+        public ActionResult Index(string SearchString)
         {
-            var customers =  _repo.FindAll().ToList();
-            var model = _mapper.Map<List<Customer>, List<CustomerVM>>(customers);
+
+            var customers = from m in _db.Customers 
+                                select m;
+            if (!String.IsNullOrEmpty(SearchString))
+            {
+                customers = customers.Where(s => s.CustomerName.Contains(SearchString));
+            }
+
+            // var customers =  _repo.FindAll().ToList();
+
+            var model = _mapper.Map<List<Customer>, List<CustomerVM>>(customers.ToList());
             return View(model);
         }
 
