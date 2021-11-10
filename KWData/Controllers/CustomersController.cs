@@ -23,7 +23,7 @@ namespace KWData.Controllers
         }
         
         // GET: CustomersController
-        public ActionResult Index(string SearchString)
+        public ActionResult Index(string SearchString, string ICString)
         {
 
             //var customers = from m in _db.Customers 
@@ -35,7 +35,7 @@ namespace KWData.Controllers
 
             // var customers =  _repo.FindAll().ToList();
 
-            var customers = _repo.GetCustomerByName(SearchString);
+            var customers = _repo.GetCustomerByName(SearchString, ICString);
             var model = _mapper.Map<List<Customer>, List<CustomerVM>>(customers.ToList());
             return View(model);
         }

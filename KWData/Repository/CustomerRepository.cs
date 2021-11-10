@@ -3,6 +3,7 @@ using KWData.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 
 namespace KWData.Repository
@@ -38,11 +39,26 @@ namespace KWData.Repository
             return customer;
         }
 
-        public ICollection<Customer> GetCustomerByName(string SearchString)
+        public ICollection<Customer> GetCustomerByName(string SearchString, string ICString)
         {
-            
-            var customers = from m in _db.Customers where m.CustomerName.Contains(SearchString)
-                            select m;
+            string SearchColumn = "CustomerName.Contains(\"" + SearchString + "\")";
+                                    
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                SearchColumn = "CustomerName.Contains(\"" + SearchString + "\")";
+                
+            }
+
+            if (!string.IsNullOrEmpty(ICString))
+            {
+                SearchColumn += " && IC.Contains(\"" + ICString  + "\")";                
+            }
+
+            //var customers = _db.Customers.Where(SearchColumn, SearchValue);
+
+            var customers = _db.Customers.Where(SearchColumn);
+
+            //var customers = from m in _db.Customers where strSQL select m;
             //if (!String.IsNullOrEmpty(SearchString))
             //{
             //    customers = customers.Where(s => s.CustomerName.Contains(SearchString));
