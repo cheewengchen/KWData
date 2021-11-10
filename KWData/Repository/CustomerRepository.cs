@@ -38,6 +38,21 @@ namespace KWData.Repository
             return customer;
         }
 
+        public ICollection<Customer> GetCustomerByName(string SearchString)
+        {
+            
+            var customers = from m in _db.Customers where m.CustomerName.Contains(SearchString)
+                            select m;
+            //if (!String.IsNullOrEmpty(SearchString))
+            //{
+            //    customers = customers.Where(s => s.CustomerName.Contains(SearchString));
+            //}
+
+            return customers.ToList();
+
+            
+        }
+
         public bool Save()
         {
             var changes = _db.SaveChanges();

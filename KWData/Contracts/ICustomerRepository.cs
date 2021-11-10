@@ -8,6 +8,6 @@ namespace KWData.Contracts
 {
     public interface ICustomerRepository : IRepositoryBase<Customer>
     {
-
+        ICollection<Customer> GetCustomerByName (string SearchString);
     }
 }
